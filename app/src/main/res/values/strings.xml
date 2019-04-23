@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">kayıt</string>
+    <string name="register">Register</string>
+    <string name="logo">AHBAB</string>
+
+    <string name="header">Profile Page</string>
+    <string name="patient_info">PATIENT INFO</string>
+    <string name="patient_name">Patient Name</string>
+    <string name="patient_age">Patient Birth Date</string>
+    <string name="patient_number">Patient Number</string>
+    <string name="patient_mail">Patient E-mail</string>
+    <string name="patient_medicine">Patient Medicines</string>
+    <string name="medicine_info">MEDICINE INFO</string>
+    <string name="add_medicine">Add Medicine</string>
+    <string name="medicine_name">Medicine Name</string>
+    <string name="medicine_date">Medicine Date</string>
+
+
+
+</resources>
