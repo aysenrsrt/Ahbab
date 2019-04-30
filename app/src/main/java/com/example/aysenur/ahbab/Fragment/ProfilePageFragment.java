@@ -6,13 +6,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -20,25 +21,33 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.aysenur.ahbab.Adapter.MedicineAdapter;
+import com.example.aysenur.ahbab.MainActivity;
 import com.example.aysenur.ahbab.Model.Medicine;
 import com.example.aysenur.ahbab.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProfilePageFragment extends Fragment{
 
+    private DatabaseReference databaseReferenceMedicines;
+
+    MedicineAdapter medicineAdapter;
+
+
     View generalView;
     TextView txtPatientName, txtPatientAge, txtPatientNumber, txtPatientEmail;
     RecyclerView rvMedicineList;
+    RecyclerView.LayoutManager mLayoutManager;
     RelativeLayout relAddMedicine;
     private Medicine medicine;
-    private List<Medicine> medicinesList;
 
-    private MedicineAdapter medicineAdapter;
-
-    private DatabaseReference databaseReferenceMedicine;
+    List<Medicine> listMedicine = new ArrayList<>();
 
     @Nullable
     @Override
@@ -54,7 +63,6 @@ public class ProfilePageFragment extends Fragment{
         rvMedicineList = generalView.findViewById(R.id.rvMedicineList);
         relAddMedicine = generalView.findViewById(R.id.relAddMedicine);
 
-
         relAddMedicine.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,16 +70,41 @@ public class ProfilePageFragment extends Fragment{
             }
         });
 
+        FirebaseDatabase mFirebaseInstance = FirebaseDatabase.getInstance();
+        databaseReferenceMedicines = mFirebaseInstance.getReference("medicine");
+
+        databaseReferenceMedicines.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                listMedicine.clear();
+
+                for(DataSnapshot postSnapshot : dataSnapshot.getChildren()){
+                    Medicine m = postSnapshot.getValue(Medicine.class);
+                    listMedicine.add(m);
+                }
+
+                mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+                rvMedicineList.setLayoutManager(mLayoutManager);
+
+                medicineAdapter = new MedicineAdapter(getContext(), listMedicine);
+                rvMedicineList.setAdapter(medicineAdapter);
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         container.removeAllViews();
         return rootView;
     }
 
-
-
-
     private void addMedicine() {
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService( Context.LAYOUT_INFLATER_SERVICE );
         final View dialogView = inflater.inflate(R.layout.dialog_add_medicine, null );
         dialogBuilder.setView(dialogView);
@@ -79,6 +112,7 @@ public class ProfilePageFragment extends Fragment{
         final EditText txtAddMedicineName = dialogView.findViewById(R.id.txtAddMedicineName);
         final EditText txtAddMedicineDate = dialogView.findViewById(R.id.txtAddMedicineDate);
         final EditText txtAddMedicineFrequency = dialogView.findViewById(R.id.txtAddMedicineFrequency);
+
         final RadioGroup rdGroup = dialogView.findViewById(R.id.rdGroup);
         int selectedID = rdGroup.getCheckedRadioButtonId();
         final RadioButton rdButton = dialogView.findViewById(selectedID);
@@ -105,10 +139,7 @@ public class ProfilePageFragment extends Fragment{
 
                 mFirebaseDatabase.child(medicineID).setValue(medicine);
 
-                Fragment profilPageFragment = new ProfilePageFragment();
-                android.support.v4.app.FragmentManager fm = getActivity().getSupportFragmentManager();
-                fm.beginTransaction().replace(R.id.diaAddMedicine, profilPageFragment).commit();
-
+                a.dismiss();
             }
         });
     }

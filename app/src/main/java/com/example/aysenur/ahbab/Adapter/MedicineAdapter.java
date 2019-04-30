@@ -1,17 +1,46 @@
 package com.example.aysenur.ahbab.Adapter;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.aysenur.ahbab.Model.Medicine;
 import com.example.aysenur.ahbab.R;
+
+import java.util.List;
 
 
 public class MedicineAdapter extends RecyclerView.Adapter<MedicineAdapter.ViewHolder> {
+
+    List<Medicine> medicineList;
+    Context context;
+
+    public MedicineAdapter(Context context, List<Medicine> medicineList){
+        this.medicineList = medicineList;
+        this.context = context;
+    }
+
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        View view = LayoutInflater.from(viewGroup.getContext())
+                .inflate(R.layout.row_medicine, viewGroup, false);
+
+        ViewHolder myViewHolder = new ViewHolder(view);
+        return myViewHolder;
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
+        viewHolder.txtMedicineName.setText(medicineList.get(i).getMedicineName());
+        viewHolder.txtMedicineDate.setText(medicineList.get(i).getMedicineDate());
+        viewHolder.txtMedicineFrequency.setText(medicineList.get(i).getMedicineFrequency());
+    }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
@@ -28,40 +57,17 @@ public class MedicineAdapter extends RecyclerView.Adapter<MedicineAdapter.ViewHo
 
             imgEditMedicine = itemView.findViewById(R.id.imgEditMedicine);
             imgDeleteMedicine = itemView.findViewById(R.id.imgDeleteMedicine);
-            itemView.setTag(itemView);
-            itemView.setOnClickListener(this);
-
         }
-
-
 
         @Override
         public void onClick(View v) {
-
         }
-
-
-    }
-
-
-    @NonNull
-    @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.row_medicine, viewGroup, false);
-        ViewHolder myViewHolder = new ViewHolder(view);
-        return myViewHolder;
-    }
-
-
-
-    @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
 
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return medicineList.size();
     }
 
 

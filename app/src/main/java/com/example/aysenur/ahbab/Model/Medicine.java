@@ -8,6 +8,8 @@ public class Medicine {
     private String medicineFrequency;
     private String medicineContinuity;
 
+    public Medicine (){ }
+
     public Medicine( String medicineName, String medicineDate, String medicineFrequency) {
         this.medicineName = medicineName;
         this.medicineDate = medicineDate;
