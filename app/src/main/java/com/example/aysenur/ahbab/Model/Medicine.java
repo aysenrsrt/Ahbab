@@ -10,7 +10,8 @@ public class Medicine {
 
     public Medicine (){ }
 
-    public Medicine( String medicineName, String medicineDate, String medicineFrequency) {
+    public Medicine(String medicineID, String medicineName, String medicineDate, String medicineFrequency) {
+        this.medicineID = medicineID;
         this.medicineName = medicineName;
         this.medicineDate = medicineDate;
         this.medicineFrequency = medicineFrequency;

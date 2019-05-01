@@ -19,6 +19,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.aysenur.ahbab.Adapter.MedicineAdapter;
 import com.example.aysenur.ahbab.MainActivity;
@@ -134,7 +135,7 @@ public class ProfilePageFragment extends Fragment{
                     medicineID = mFirebaseDatabase.push().getKey();
                 }
 
-                medicine = new Medicine(txtAddMedicineName.getText().toString(), txtAddMedicineDate.getText().toString(),
+                medicine = new Medicine(medicineID, txtAddMedicineName.getText().toString(), txtAddMedicineDate.getText().toString(),
                                             txtAddMedicineFrequency.getText().toString());
 
                 mFirebaseDatabase.child(medicineID).setValue(medicine);
@@ -143,5 +144,6 @@ public class ProfilePageFragment extends Fragment{
             }
         });
     }
+
  }
 
